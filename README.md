@@ -30,3 +30,7 @@ Welcome to the Translation App! This web application allows users to translate t
 
    ```bash
    pip install flask translate
+   
+Run the Flask app:
+`python app.py`
+Open the app in your web browser at http://127.0.0.1:5000/.

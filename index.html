@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+
+        header {
+            background-color: #4285f4;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4285f4;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Translation App</h1>
+    </header>
+
+    <form method="post" action="/">
+        <label for="source_text">Enter the text to translate:</label>
+        <input type="text" id="source_text" name="source_text" required>
+        
+        <label for="target_language">Select the target language:</label>
+        <select id="target_language" name="target_language" required>
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+            <option value="zh">Chinese</option>
+        </select>
+
+        <button type="button" onclick="translateAndShow()">Translate</button>
+    </form>
+
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <p id="translation_result"></p>
+            <button onclick="copyToClipboard()">Copy to Clipboard</button>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function translateAndShow() {
+            var sourceText = document.getElementById("source_text").value;
+            var targetLanguage = document.getElementById("target_language").value;
+
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "source_text=" + encodeURIComponent(sourceText) + "&target_language=" + encodeURIComponent(targetLanguage),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.translation) {
+                    document.getElementById("translation_result").innerText = "Translation: " + data.translation;
+                    openModal();
+                } else if (data.error) {
+                    document.getElementById("translation_result").innerText = "Error: " + data.error;
+                }
+            });
+        }
+
+        function copyToClipboard() {
+            var textToCopy = document.getElementById("translation_result").innerText;
+            var textarea = document.createElement("textarea");
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            alert("Translation copied to clipboard!");
+        }
+
+        function openModal() {
+            document.getElementById("resultModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("resultModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>

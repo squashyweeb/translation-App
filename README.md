@@ -1,4 +1,4 @@
-# Translation App
+# Translation App (https://squashyweeb.github.io/translation-App/)
 
 Welcome to the Translation App! This web application allows users to translate text to different languages and copy the translation to the clipboard.
 

@@ -19,7 +19,7 @@ Welcome to the Translation App! This web application allows users to translate t
 4. The translation result will be displayed in a pop-up modal.
 5. Optionally, click the "Copy to Clipboard" button to copy the translation.
 
-## Technologies Used
+## stuff Used
 
 - Python (Flask) for the backend
 - HTML, CSS, and JavaScript for the frontend
